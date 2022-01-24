@@ -9,7 +9,7 @@ except Exception:
 from django.conf import settings
 import uuid
 
-
+listOfChoices = []
 # Instructor model
 class Instructor(models.Model):
     user = models.ForeignKey(
@@ -129,11 +129,16 @@ class Choice(models.Model):
     question_id = models.ManyToManyField(Question)
     is_correct = models.BooleanField()
     choice_text = models.CharField(max_length=500)
-# <HINT> The submission model
+ # <HINT> The submission model
 # One enrollment could have multiple submission
 # One submission could have multiple choices
 # One choice could belong to multiple submissions
 class Submission(models.Model):
-   enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
-   choices = models.ManyToManyField(Choice)
+   
+    enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice)
 #  Other fields and methods you would like to design
+    def add(self, int):
+        listOfChoices.append(int)
+    def getChoices(self):
+        return listOfChoices

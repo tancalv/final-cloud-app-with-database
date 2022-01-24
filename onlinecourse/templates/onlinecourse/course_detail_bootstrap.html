@@ -73,9 +73,10 @@
             <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
             --> 
             {% for question in course.question_set.all %}
-             <form id="questionform" action="point to a submit view" method="post">
+             <form id="questionform" action="{% url 'onlinecourse:submit' course.id %}" method="post">
                          <div class="card mt-1">
                             <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                            {% csrf_token %}
                             {% for choice in question.choice_set.all %}
                             <div class="form-group">
                                  <div class="form-check">

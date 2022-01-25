@@ -149,19 +149,14 @@ def show_exam_result(request, course_id, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     question_grade = 0
     grades = 0
- 
     context['grade'] = 0
- 
-   
     for choices in submission.getChoices():
         choice = get_object_or_404(Choice, pk=choices)
         if (choice.is_correct):
-            
             for question in choice.question_id.all().iterator():
                 question_grade = question.grade
             grades += question_grade
     context['grade'] = grades
-    print(context.get('grade'))
     context['course'] = course
     
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)

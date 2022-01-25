@@ -119,7 +119,10 @@ def submit(request, course_id):
         if key.startswith('choice'):
             value = request.POST[key]
             choice_id = int(value)
-            submission.add(choice_id)
+            if (choice_id in submission.getChoices()):
+                submission.clearChoices()
+            else:
+                submission.add(choice_id)
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, submission.id,)))
 
 
@@ -146,22 +149,22 @@ def show_exam_result(request, course_id, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     question_grade = 0
     grades = 0
+ 
+    context['grade'] = 0
+ 
+   
     for choices in submission.getChoices():
         choice = get_object_or_404(Choice, pk=choices)
         if (choice.is_correct):
+            
             for question in choice.question_id.all().iterator():
                 question_grade = question.grade
-            
             grades += question_grade
-    if (grades >= 100 and context.get('grade') == 100):
-        grades = 0
-    elif (grades > 100):
-        grades = 100
     context['grade'] = grades
-     
+    print(context.get('grade'))
     context['course'] = course
+    
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
-
-        
+ 
 
